@@ -6,6 +6,7 @@
   @param image_ratio {string}
   @param show_secondary_image {boolean}
   @param show_vendor {boolean}
+  @param layout {string} optional: 'home' | 'product'
 {% enddoc %}
 
 {%- liquid
@@ -30,6 +31,7 @@
     "cardColorScheme": {{ settings.card_color_scheme | json }},
     "badgePosition": {{ settings.badge_position | json }},
     "soldOutBadgeColorScheme": {{ settings.sold_out_badge_color_scheme | json }},
-    "saleBadgeColorScheme": {{ settings.sale_badge_color_scheme | json }}
+    "saleBadgeColorScheme": {{ settings.sale_badge_color_scheme | json }},
+    "layout": {{ layout | default: "home" | json }}
   }'
 ></div>

@@ -1,39 +1,16 @@
 import { useEffect, useState } from 'react';
 import { fetchProductsByHandles } from '../api/fetchProductsByHandles';
-import { richTextToPlain } from '../utils/richTextToPlain';
-import { ProductCard } from './ProductCard';
+import { getLookbookDescription } from '../utils/lookbookDescription';
+import { LookbookProductGrid } from './LookbookProductGrid';
 
-function getDescription(lookbook) {
-  if (lookbook.descriptionHtml) return { html: lookbook.descriptionHtml };
-  if (typeof lookbook.description === 'string' && lookbook.description) {
-    return { text: lookbook.description };
-  }
-  if (lookbook.description && typeof lookbook.description === 'object') {
-    const text = richTextToPlain(lookbook.description);
-    return text ? { text } : null;
-  }
-  return null;
-}
+
 
 export function Lookbook({ lookbook, credentials, config }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const {
-    country,
-    sectionId,
-    columnsDesktop = 4,
-    columnsMobile = '2',
-    imageRatio = 'portrait',
-    showSecondaryImage = false,
-    showVendor = false,
-    cardStyle = 'standard',
-    cardColorScheme = 'background-1',
-    badgePosition = 'bottom left',
-    soldOutBadgeColorScheme = 'inverse',
-    saleBadgeColorScheme = 'accent-2',
-  } = config;
+  const { country } = config;
 
   useEffect(() => {
     let cancelled = false;
@@ -68,7 +45,7 @@ export function Lookbook({ lookbook, credentials, config }) {
   if (loading) return <p className="lookbook__status">Loading...</p>;
   if (error) return <p className="lookbook__status lookbook__status--error">{error}</p>;
 
-  const description = getDescription(lookbook);
+  const description = getLookbookDescription(lookbook);
 
   return (
     <section className="lookbook">
@@ -83,26 +60,7 @@ export function Lookbook({ lookbook, credentials, config }) {
         <p className="lookbook__description">{description.text}</p>
       )}
 
-      <ul
-        className={`grid product-grid contains-card contains-card--product contains-card--${cardStyle} grid--${columnsDesktop}-col-desktop grid--${columnsMobile}-col-tablet-down`}
-        role="list"
-      >
-        {products.map((product) => (
-          <ProductCard
-            key={product.handle}
-            product={product}
-            sectionId={sectionId}
-            imageRatio={imageRatio}
-            showSecondaryImage={showSecondaryImage}
-            showVendor={showVendor}
-            cardStyle={cardStyle}
-            cardColorScheme={cardColorScheme}
-            badgePosition={badgePosition}
-            soldOutBadgeColorScheme={soldOutBadgeColorScheme}
-            saleBadgeColorScheme={saleBadgeColorScheme}
-          />
-        ))}
-      </ul>
+      <LookbookProductGrid products={products} config={config} />
     </section>
   );
 }
