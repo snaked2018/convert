@@ -1,16 +1,91 @@
-<div>
-    Lookbook (Products)
-</div>
+{%- liquid
+  assign max_lookbooks = 2
+  assign rendered = 0
+-%}
+
+{%- capture lookbooks_json -%}
+[
+  {%- for lb in shop.metaobjects.lookbook.values -%}
+    {%- if rendered >= max_lookbooks -%}
+      {%- break -%}
+    {%- endif -%}
+
+    {%- assign handles = lb.product_handles.value -%}
+    {%- if handles != blank and handles contains product.handle -%}
+      {%- capture description_html -%}
+        {{ lb.description | metafield_tag }}
+      {%- endcapture -%}
+      {%- unless rendered == 0 -%},{%- endunless -%}
+      {
+        "title": {{ lb.title.value | json }},
+        "descriptionHtml": {{ description_html | strip | json }},
+        "productHandles": {{ lb.product_handles.value | json }}
+      }
+      {%- assign rendered = rendered | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+]
+{%- endcapture -%}
+
+{%- if rendered > 0 -%}
+  {%- style -%}
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    }
+
+    @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+    }
+  {%- endstyle -%}
+
+  <div class="page-width section-{{ section.id }}-padding">
+    {% render 'lookbook-mount',
+      lookbooks: lookbooks_json,
+      section_id: section.id
+    %}
+  </div>
+{%- endif -%}
 
 {% schema %}
 {
   "name": "Lookbook (Products)",
-  "templates": ["product"],
+  "tag": "section",
+  "class": "section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
   "settings": [
     {
+      "type": "paragraph",
+      "content": "Shows lookbooks that include the current product. A maximum of two lookbooks are displayed."
+    },
+    {
       "type": "header",
-      "content": "Lookbook",
-      "info": "Select a lookbook to display on the products page."
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
     }
   ],
   "presets": [
