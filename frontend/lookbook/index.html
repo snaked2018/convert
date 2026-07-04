@@ -7,13 +7,15 @@
   </head>
   <body>
     <!-- Same as theme.liquid -->
+    <!-- I'm aware that storefront access token is not secure to store in the frontend. I'm doing this for testing purposes only. -->
+
+     <!--
     <script id="lookbook-credentials" type="application/json">
       {
         "storefrontAccessToken": "750146a9bc59ac44880ea0b33895bd81"
       }
     </script>
 
-    <!-- Same as lookbook-mount.liquid -->
     <div
       id="lookbook-local-test"
       class="lookbook-root"
@@ -27,11 +29,10 @@
       }'
     ></div>
 
-    <!-- main.jsx uses window.Shopify.shop for API calls -->
     <script>
       window.Shopify = { shop: "development-xl4ruurg.myshopify.com" };
     </script>
-
+    -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
