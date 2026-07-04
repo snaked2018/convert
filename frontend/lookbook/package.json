@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite build --watch",
     "local": "vite",
-    "build": "vite build",
+    "build": "npm run lint && vite build",
     "lint": "eslint ."
   },
   "dependencies": {
