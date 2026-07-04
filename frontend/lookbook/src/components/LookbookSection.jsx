@@ -8,7 +8,7 @@ export function LookbookSection({ config, credentials }) {
           key={`${lookbook.title}-${index}`}
           lookbook={lookbook}
           credentials={credentials}
-          country={config.country}
+          config={config}
         />
       ))}
     </div>

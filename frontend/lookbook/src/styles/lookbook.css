@@ -1,37 +1,26 @@
 .lookbook-section {
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
 
-  .lookbook__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1.5rem;
-  }
-  
-  .lookbook-product {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-  }
-  
-  .lookbook-product img {
-    width: 100%;
-    aspect-ratio: 3 / 4;
-    object-fit: cover;
-    display: block;
-  }
-  
-  .lookbook-product__price {
-    display: flex;
-    gap: 0.5rem;
-  }
-  
-  .lookbook-product__price-compare {
-    opacity: 0.6;
-  }
-  
-  .lookbook__status--error {
-    color: #b00020;
-  }
+.lookbook__title {
+  margin: 0 0 0.5rem;
+}
+
+.lookbook__description {
+  margin: 0 0 1.5rem;
+  opacity: 0.85;
+}
+
+.lookbook .product-grid {
+  margin-top: 0;
+}
+
+.lookbook__status {
+  margin: 0;
+}
+
+.lookbook__status--error {
+  color: rgb(var(--color-base-text));
+}

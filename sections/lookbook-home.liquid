@@ -32,7 +32,12 @@
   <div class="page-width section-{{ section.id }}-padding">
     {% render 'lookbook-mount',
       lookbooks: lookbooks_json,
-      section_id: section.id
+      section_id: section.id,
+      columns_desktop: section.settings.columns_desktop,
+      columns_mobile: section.settings.columns_mobile,
+      image_ratio: section.settings.image_ratio,
+      show_secondary_image: section.settings.show_secondary_image,
+      show_vendor: section.settings.show_vendor
     %}
   </div>
 
@@ -61,6 +66,52 @@
       "id": "lookbook",
       "label": "Lookbook",
       "metaobject_type": "lookbook"
+    },
+    {
+      "type": "header",
+      "content": "Product grid"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Columns on desktop",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns on mobile",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        { "value": "adapt", "label": "Adapt to image" },
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "portrait"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "label": "Show second image on hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
     },
     {
       "type": "header",

@@ -4,9 +4,21 @@ const PRODUCT_FIELDS = `
   handle
   title
   onlineStoreUrl
+  availableForSale
+  vendor
   featuredImage {
-    url(transform: { maxWidth: 600 })
+    url(transform: { maxWidth: 1066 })
     altText
+    width
+    height
+  }
+  images(first: 2) {
+    nodes {
+      url(transform: { maxWidth: 1066 })
+      altText
+      width
+      height
+    }
   }
   priceRange {
     minVariantPrice {

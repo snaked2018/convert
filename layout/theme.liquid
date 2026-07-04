@@ -302,6 +302,8 @@
 
     {% comment %} Lookbook credentials for the React lookbook app {% endcomment %}
     {%- if settings.storefront_access_token != blank -%}
+      {{ 'component-card.css' | asset_url | stylesheet_tag }}
+      {{ 'component-price.css' | asset_url | stylesheet_tag }}
       {{ 'lookbook.css' | asset_url | stylesheet_tag }}
       <script src="{{ 'lookbook.js' | asset_url }}" defer="defer"></script>
       <script id="lookbook-credentials" type="application/json">
