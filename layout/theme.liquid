@@ -312,6 +312,15 @@
           "storefrontAccessToken": {{ settings.storefront_access_token | json }}
         }
       </script>
+      <script id="lookbook-theme-config" type="application/json">
+        {
+          "cardStyle": {{ settings.card_style | json }},
+          "cardColorScheme": {{ settings.card_color_scheme | json }},
+          "badgePosition": {{ settings.badge_position | json }},
+          "soldOutBadgeColorScheme": {{ settings.sold_out_badge_color_scheme | json }},
+          "saleBadgeColorScheme": {{ settings.sale_badge_color_scheme | json }}
+        }
+      </script>
     {%- endif -%}
   </body>
 </html>

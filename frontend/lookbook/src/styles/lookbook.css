@@ -26,17 +26,13 @@
   color: rgb(var(--color-base-text));
 }
 
-.lookbook-carousel__header {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0;
-  margin-bottom: 1.5rem;
-}
-
 .lookbook-carousel {
   display: flex;
   flex-direction: column;
+}
+
+.lookbook-carousel__panel--hidden {
+  display: none;
 }
 
 .lookbook-carousel__tabs {

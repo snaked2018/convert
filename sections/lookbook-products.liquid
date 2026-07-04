@@ -1,33 +1,20 @@
 {%- liquid
   assign max_lookbooks = 2
-  assign rendered = 0
+  assign match_count = 0
+
+  for lb in shop.metaobjects.lookbook.values
+    if match_count >= max_lookbooks
+      break
+    endif
+
+    assign handles = lb.product_handles.value
+    if handles != blank and handles contains product.handle
+      assign match_count = match_count | plus: 1
+    endif
+  endfor
 -%}
 
-{%- capture lookbooks_json -%}
-[
-  {%- for lb in shop.metaobjects.lookbook.values -%}
-    {%- if rendered >= max_lookbooks -%}
-      {%- break -%}
-    {%- endif -%}
-
-    {%- assign handles = lb.product_handles.value -%}
-    {%- if handles != blank and handles contains product.handle -%}
-      {%- capture description_html -%}
-        {{ lb.description | metafield_tag }}
-      {%- endcapture -%}
-      {%- unless rendered == 0 -%},{%- endunless -%}
-      {
-        "title": {{ lb.title.value | json }},
-        "descriptionHtml": {{ description_html | strip | json }},
-        "productHandles": {{ lb.product_handles.value | json }}
-      }
-      {%- assign rendered = rendered | plus: 1 -%}
-    {%- endif -%}
-  {%- endfor -%}
-]
-{%- endcapture -%}
-
-{%- if rendered > 0 -%}
+{%- if match_count > 0 -%}
   {%- style -%}
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
@@ -43,16 +30,89 @@
   {%- endstyle -%}
 
   <div class="page-width section-{{ section.id }}-padding">
-    {% render 'lookbook-mount',
-      lookbooks: lookbooks_json,
-      section_id: section.id,
-      layout: 'product',
-      columns_desktop: section.settings.columns_desktop,
-      columns_mobile: section.settings.columns_mobile,
-      image_ratio: section.settings.image_ratio,
-      show_secondary_image: section.settings.show_secondary_image,
-      show_vendor: section.settings.show_vendor
-    %}
+    {%- if match_count > 1 -%}
+      <div
+        class="lookbook-carousel"
+        id="LookbookCarousel-{{ section.id }}"
+        data-lookbook-carousel
+      >
+        <div class="lookbook-carousel__tabs" role="tablist" aria-label="Lookbook selection">
+          {%- assign tab_index = 0 -%}
+          {%- assign tab_rendered = 0 -%}
+          {%- for lb in shop.metaobjects.lookbook.values -%}
+            {%- if tab_rendered >= max_lookbooks -%}
+              {%- break -%}
+            {%- endif -%}
+
+            {%- assign handles = lb.product_handles.value -%}
+            {%- if handles != blank and handles contains product.handle -%}
+              <button
+                type="button"
+                class="lookbook-carousel__tab{% if tab_index == 0 %} lookbook-carousel__tab--active{% endif %}"
+                role="tab"
+                data-lookbook-tab="{{ tab_index }}"
+                aria-selected="{% if tab_index == 0 %}true{% else %}false{% endif %}"
+                aria-controls="LookbookPanel-{{ section.id }}-{{ tab_index }}"
+              >
+                {{ lb.title.value }}
+              </button>
+              {%- assign tab_index = tab_index | plus: 1 -%}
+              {%- assign tab_rendered = tab_rendered | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        {%- assign panel_index = 0 -%}
+        {%- assign panel_rendered = 0 -%}
+        {%- for lb in shop.metaobjects.lookbook.values -%}
+          {%- if panel_rendered >= max_lookbooks -%}
+            {%- break -%}
+          {%- endif -%}
+
+          {%- assign handles = lb.product_handles.value -%}
+          {%- if handles != blank and handles contains product.handle -%}
+            {%- liquid
+              assign panel_hidden = false
+              unless panel_index == 0
+                assign panel_hidden = true
+              endunless
+            -%}
+            <div id="LookbookPanel-{{ section.id }}-{{ panel_index }}">
+              {% render 'lookbook-product-panel',
+                lookbook: lb,
+                section_id: section.id,
+                panel_index: panel_index,
+                panel_hidden: panel_hidden,
+                columns_desktop: section.settings.columns_desktop,
+                columns_mobile: section.settings.columns_mobile,
+                image_ratio: section.settings.image_ratio,
+                show_secondary_image: section.settings.show_secondary_image,
+                show_vendor: section.settings.show_vendor
+              %}
+            </div>
+            {%- assign panel_index = panel_index | plus: 1 -%}
+            {%- assign panel_rendered = panel_rendered | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      {%- for lb in shop.metaobjects.lookbook.values -%}
+        {%- assign handles = lb.product_handles.value -%}
+        {%- if handles != blank and handles contains product.handle -%}
+          {% render 'lookbook-product-panel',
+            lookbook: lb,
+            section_id: section.id,
+            panel_index: 0,
+            columns_desktop: section.settings.columns_desktop,
+            columns_mobile: section.settings.columns_mobile,
+            image_ratio: section.settings.image_ratio,
+            show_secondary_image: section.settings.show_secondary_image,
+            show_vendor: section.settings.show_vendor
+          %}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
   </div>
 {%- endif -%}
 

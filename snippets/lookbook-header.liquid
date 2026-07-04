@@ -1,0 +1,17 @@
+{% doc %}
+  Renders lookbook title and description from a metaobject entry.
+  @param lookbook {object} Metaobject entry
+{% enddoc %}
+
+{%- if lookbook.title.value != blank -%}
+  <h2 class="lookbook__title title h1">{{ lookbook.title.value }}</h2>
+{%- endif -%}
+
+{%- capture description_html -%}
+  {{ lookbook.description | metafield_tag }}
+{%- endcapture -%}
+{%- if description_html != blank -%}
+  <div class="lookbook__description rte">
+    {{ description_html }}
+  </div>
+{%- endif -%}

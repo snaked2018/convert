@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetchProductsByHandles } from '../api/fetchProductsByHandles';
-import { getLookbookDescription } from '../utils/lookbookDescription';
 import { LookbookProductGrid } from './LookbookProductGrid';
-
-
 
 export function Lookbook({ lookbook, credentials, config }) {
   const [products, setProducts] = useState([]);
@@ -45,22 +42,6 @@ export function Lookbook({ lookbook, credentials, config }) {
   if (loading) return <p className="lookbook__status">Loading...</p>;
   if (error) return <p className="lookbook__status lookbook__status--error">{error}</p>;
 
-  const description = getLookbookDescription(lookbook);
+  return <LookbookProductGrid products={products} config={config} />;
 
-  return (
-    <section className="lookbook">
-      {lookbook.title && <h2 className="lookbook__title h1"><strong>{lookbook.title}</strong></h2>}
-      {description?.html && (
-        <div
-          className="lookbook__description rte"
-          dangerouslySetInnerHTML={{ __html: description.html }}
-        />
-      )}
-      {description?.text && (
-        <p className="lookbook__description">{description.text}</p>
-      )}
-
-      <LookbookProductGrid products={products} config={config} />
-    </section>
-  );
 }

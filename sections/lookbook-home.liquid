@@ -17,23 +17,16 @@
 {%- endstyle -%}
 
 {%- if lookbook_item != blank -%}
-  {%- capture description_html -%}
-    {{ lookbook_item.description | metafield_tag }}
-  {%- endcapture -%}
-
   {%- capture lookbooks_json -%}
-  [{
-    "title": {{ lookbook_item.title.value | json }},
-    "descriptionHtml": {{ description_html | strip | json }},
-    "productHandles": {{ lookbook_item.product_handles.value | json }}
-  }]
+  [{"productHandles": {{ lookbook_item.product_handles.value | json }}}]
   {%- endcapture -%}
 
   <div class="page-width section-{{ section.id }}-padding">
+    {% render 'lookbook-header', lookbook: lookbook_item %}
+
     {% render 'lookbook-mount',
       lookbooks: lookbooks_json,
       section_id: section.id,
-      layout: 'home',
       columns_desktop: section.settings.columns_desktop,
       columns_mobile: section.settings.columns_mobile,
       image_ratio: section.settings.image_ratio,

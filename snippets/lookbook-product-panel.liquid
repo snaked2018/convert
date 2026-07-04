@@ -1,0 +1,35 @@
+{% doc %}
+  One lookbook panel: Liquid header + React product grid mount.
+  @param lookbook {object} Metaobject entry
+  @param section_id {string}
+  @param panel_index {number}
+  @param columns_desktop {number}
+  @param columns_mobile {string}
+  @param image_ratio {string}
+  @param show_secondary_image {boolean}
+  @param show_vendor {boolean}
+  @param panel_hidden {boolean}
+{% enddoc %}
+
+{%- capture lookbooks_json -%}
+[{"productHandles": {{ lookbook.product_handles.value | json }}}]
+{%- endcapture -%}
+
+{%- assign mount_id = section_id | append: '-' | append: panel_index -%}
+
+<div
+  class="lookbook-carousel__panel{% if panel_hidden == true %} lookbook-carousel__panel--hidden{% endif %}"
+  data-lookbook-panel="{{ panel_index }}"
+>
+  {% render 'lookbook-header', lookbook: lookbook %}
+
+  {% render 'lookbook-mount',
+    lookbooks: lookbooks_json,
+    section_id: mount_id,
+    columns_desktop: columns_desktop,
+    columns_mobile: columns_mobile,
+    image_ratio: image_ratio,
+    show_secondary_image: show_secondary_image,
+    show_vendor: show_vendor
+  %}
+</div>
