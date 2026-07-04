@@ -1562,15 +1562,6 @@
     "name": "t:settings_schema.lookbook.name",
     "settings": [
       {
-        "type": "header",
-        "content": "t:settings_schema.lookbook.settings.header.content"
-      },
-      {
-        "type": "text",
-        "id": "lookbook_title",
-        "label": "t:settings_schema.lookbook.settings.lookbook_title.label"
-      },
-      {
         "type": "text",
         "id": "storefront_access_token",
         "label": "t:settings_schema.lookbook.settings.storefront_access_token.label",
