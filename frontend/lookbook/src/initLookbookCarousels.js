@@ -3,9 +3,10 @@ export function initLookbookCarousels() {
     if (carousel.dataset.lookbookCarouselInit === 'true') return;
 
     const tabs = [...carousel.querySelectorAll('[data-lookbook-tab]')];
-    const panels = [...carousel.querySelectorAll('[data-lookbook-panel]')];
+    const bannerPanels = [...carousel.querySelectorAll('[data-lookbook-banner-panel]')];
+    const gridPanels = [...carousel.querySelectorAll('[data-lookbook-panel]')];
 
-    if (tabs.length <= 1 || panels.length <= 1) return;
+    if (tabs.length <= 1) return;
 
     function activate(index) {
       tabs.forEach((tab, tabIndex) => {
@@ -14,9 +15,13 @@ export function initLookbookCarousels() {
         tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
       });
 
-      panels.forEach((panel, panelIndex) => {
+      bannerPanels.forEach((panel) => {
+        const panelIndex = Number(panel.dataset.lookbookBannerPanel);
         panel.classList.toggle('lookbook-carousel__panel--hidden', panelIndex !== index);
-        panel.hidden = false;
+      });
+
+      gridPanels.forEach((panel, panelIndex) => {
+        panel.classList.toggle('lookbook-carousel__panel--hidden', panelIndex !== index);
       });
     }
 

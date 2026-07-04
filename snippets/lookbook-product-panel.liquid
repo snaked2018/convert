@@ -1,8 +1,16 @@
 {% doc %}
-  One lookbook panel: Liquid header + React product grid mount.
+  One lookbook panel: banner + React product grid mount.
   @param lookbook {object} Metaobject entry
   @param section_id {string}
   @param panel_index {number}
+  @param banner_height {string}
+  @param banner_content_position {string}
+  @param banner_mobile_content_alignment {string}
+  @param banner_desktop_content_alignment {string}
+  @param banner_overlay_opacity {number}
+  @param banner_color_scheme {string}
+  @param banner_background_color {color}
+  @param banner_content_background_image {image}
   @param columns_desktop {number}
   @param columns_mobile {string}
   @param image_ratio {string}
@@ -16,12 +24,24 @@
 {%- endcapture -%}
 
 {%- assign mount_id = section_id | append: '-' | append: panel_index -%}
+{%- assign banner_id = section_id | append: '-banner-' | append: panel_index -%}
 
 <div
   class="lookbook-carousel__panel{% if panel_hidden == true %} lookbook-carousel__panel--hidden{% endif %}"
   data-lookbook-panel="{{ panel_index }}"
 >
-  {% render 'lookbook-header', lookbook: lookbook %}
+  {% render 'lookbook-banner',
+    lookbook: lookbook,
+    section_id: banner_id,
+    banner_height: banner_height,
+    content_position: banner_content_position,
+    mobile_content_alignment: banner_mobile_content_alignment,
+    desktop_content_alignment: banner_desktop_content_alignment,
+    image_overlay_opacity: banner_overlay_opacity,
+    color_scheme: banner_color_scheme,
+    banner_background_color: banner_background_color,
+    banner_content_background_image: banner_content_background_image
+  %}
 
   {% render 'lookbook-mount',
     lookbooks: lookbooks_json,

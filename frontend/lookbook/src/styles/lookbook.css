@@ -6,16 +6,13 @@
 
 .lookbook__title {
   margin: 0 0 0.5rem;
+  text-align: center;
 }
 
 .lookbook__description {
   margin: 0 0 1.5rem;
   opacity: 0.85;
-}
-
-.lookbook .product-grid,
-.lookbook-carousel__panel .product-grid {
-  margin-top: 0;
+  text-align: center;
 }
 
 .lookbook__status {
@@ -37,20 +34,65 @@
 
 .lookbook-carousel__tabs {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin: 0 0 1rem;
+  margin: 1.5rem 0 0;
+}
+
+.lookbook-banner--carousel {
+  position: relative;
+}
+
+.lookbook-banner--carousel .lookbook-carousel__media-panel {
+  position: absolute;
+  inset: 0;
+}
+
+.lookbook-banner--carousel .lookbook-carousel__media-panel .banner__media {
+  height: 100%;
+}
+
+@media screen and (max-width: 749px) {
+  .lookbook-banner--carousel.banner--small:not(.banner--adapt) .lookbook-carousel__media-panel .banner__media {
+    height: 28rem;
+  }
+
+  .lookbook-banner--carousel.banner--medium:not(.banner--adapt) .lookbook-carousel__media-panel .banner__media {
+    height: 34rem;
+  }
+
+  .lookbook-banner--carousel.banner--large:not(.banner--adapt) .lookbook-carousel__media-panel .banner__media {
+    height: 39rem;
+  }
+}
+
+.lookbook-banner--carousel .lookbook-carousel__media-panel.lookbook-carousel__panel--hidden {
+  display: none;
+}
+
+.lookbook-banner--carousel .lookbook-carousel__copy-panel.lookbook-carousel__panel--hidden {
+  display: none;
+}
+
+.lookbook-banner--carousel .banner__content {
+  position: relative;
+  z-index: 2;
+}
+
+.lookbook-banner--carousel .banner__box > .lookbook-carousel__tabs {
+  margin-bottom: 0;
 }
 
 .lookbook-carousel__tab {
   appearance: none;
-  border: 0.1rem solid rgba(var(--color-foreground), 0.2);
+  -webkit-tap-highlight-color: transparent;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.35);
   border-radius: var(--buttons-radius, 0);
-  background: rgb(var(--color-background));
+  background-color: rgb(var(--color-background));
   color: rgb(var(--color-foreground));
   cursor: pointer;
   font: inherit;
-  font-size: 1.2rem;
   letter-spacing: 0.06rem;
   line-height: 1.2;
   padding: 0.8rem 1.4rem;
@@ -58,17 +100,119 @@
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.lookbook-carousel__tab:hover {
-  border-color: rgb(var(--color-foreground));
-}
-
-.lookbook-carousel__tab--active {
-  background: rgb(var(--color-foreground));
+.lookbook-banner--carousel .banner__box .lookbook-carousel__tab--active {
+  background-color: rgb(var(--color-foreground));
   border-color: rgb(var(--color-foreground));
   color: rgb(var(--color-background));
 }
 
-.lookbook-carousel__tab:focus-visible {
+@media (hover: hover) {
+  .lookbook-banner--carousel .banner__box .lookbook-carousel__tab:hover:not(.lookbook-carousel__tab--active) {
+    border-color: rgb(var(--color-foreground));
+    background-color: rgba(var(--color-foreground), 0.08);
+  }
+}
+
+.lookbook-banner--carousel .banner__box .lookbook-carousel__tab:active:not(.lookbook-carousel__tab--active) {
+  border-color: rgb(var(--color-foreground));
+  background-color: rgba(var(--color-foreground), 0.08);
+}
+
+.lookbook-banner--carousel .banner__box .lookbook-carousel__tab:focus-visible {
   outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
   outline-offset: 0.3rem;
+}
+
+.lookbook-carousel__panel .lookbook-root {
+  margin-top: 0;
+}
+
+.lookbook-banner--contained {
+  overflow: hidden;
+  border-radius: var(--media-radius, 0);
+}
+
+.lookbook-banner--contained .banner__box {
+  margin-bottom: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .lookbook-banner--contained.banner--small:not(.banner--adapt) {
+    min-height: 42rem;
+  }
+
+  .lookbook-banner--contained.banner--medium:not(.banner--adapt) {
+    min-height: 56rem;
+  }
+
+  .lookbook-banner--contained.banner--large:not(.banner--adapt) {
+    min-height: 72rem;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .lookbook-carousel__tab {
+    width: 100%;
+  }
+  
+  .lookbook-banner--contained:not(.banner--mobile-bottom) .banner__box.color-background-1 {
+    --color-foreground: var(--color-base-text);
+    --color-background: var(--color-base-background-1);
+    background: var(--gradient-background);
+  }
+
+  .lookbook-banner--contained:not(.banner--mobile-bottom) .banner__box.color-background-2 {
+    --color-foreground: var(--color-base-text);
+    --color-background: var(--color-base-background-2);
+    background: var(--gradient-background);
+  }
+
+  .lookbook-banner--contained:not(.banner--mobile-bottom) .banner__box.color-accent-1 {
+    --color-foreground: var(--color-base-solid-button-labels);
+    --color-background: var(--color-base-accent-1);
+    background: var(--gradient-background);
+  }
+
+  .lookbook-banner--contained:not(.banner--mobile-bottom) .banner__box.color-accent-2 {
+    --color-foreground: var(--color-base-solid-button-labels);
+    --color-background: var(--color-base-accent-2);
+    background: var(--gradient-background);
+  }
+
+  .lookbook-banner--contained:not(.banner--mobile-bottom) .banner__box.color-inverse {
+    --color-foreground: var(--color-base-background-1);
+    --color-background: var(--color-base-text);
+    background: var(--gradient-background);
+  }
+
+  .lookbook-banner--contained .banner__content {
+    padding: 2rem 1.5rem;
+  }
+
+  .lookbook-banner--contained .banner__box.content-container--full-width-mobile {
+    border-radius: var(--text-boxes-radius, 0);
+    max-width: calc(100% - 3rem);
+    padding: 2.5rem 2rem;
+    width: auto;
+  }
+
+  .lookbook-banner--contained .banner__box.content-container--full-width-mobile:after {
+    display: block;
+  }
+
+  .lookbook-banner--contained.banner--small:not(.banner--adapt) .banner__content {
+    min-height: 28rem;
+  }
+
+  .lookbook-banner--contained.banner--medium:not(.banner--adapt) .banner__content {
+    min-height: 34rem;
+  }
+
+  .lookbook-banner--contained.banner--large:not(.banner--adapt) .banner__content {
+    min-height: 39rem;
+  }
+
+  .lookbook-banner--carousel .banner__content {
+    width: 100%;
+  }
 }

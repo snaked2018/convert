@@ -1,0 +1,203 @@
+{% doc %}
+  Carousel banner: one contained banner shell, switching media/copy panels, tabs inside banner box.
+  @param section_id {string}
+  @param product_handle {string}
+  @param banner_height {string}
+  @param banner_content_position {string}
+  @param banner_mobile_content_alignment {string}
+  @param banner_desktop_content_alignment {string}
+  @param banner_overlay_opacity {number}
+  @param banner_color_scheme {string}
+  @param banner_background_color {color}
+  @param banner_content_background_image {image}
+{% enddoc %}
+
+{%- liquid
+  assign max_lookbooks = 2
+  assign match_count = 0
+  assign content_position = banner_content_position | default: 'middle-center'
+  assign mobile_content_alignment = banner_mobile_content_alignment | default: 'center'
+  assign desktop_content_alignment = banner_desktop_content_alignment | default: 'center'
+  assign banner_height = banner_height | default: 'medium'
+  assign image_overlay_opacity = banner_overlay_opacity | default: 30
+  assign color_scheme = banner_color_scheme | default: 'background-1'
+  assign first_banner_image = nil
+-%}
+
+{%- for lb in shop.metaobjects.lookbook.values -%}
+  {%- if first_banner_image != blank -%}
+    {%- break -%}
+  {%- endif -%}
+  {%- assign handles = lb.product_handles.value -%}
+  {%- if handles != blank and handles contains product_handle -%}
+    {%- assign first_banner_image = lb.banner_image.value -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if banner_height == 'adapt' and first_banner_image != blank -%}
+  {%- style -%}
+    @media screen and (max-width: 749px) {
+      #LookbookBanner-{{ section_id }}::before,
+      #LookbookBanner-{{ section_id }} .banner__media::before,
+      #LookbookBanner-{{ section_id }}:not(.banner--mobile-bottom) .banner__content::before {
+        padding-bottom: {{ 1 | divided_by: first_banner_image.aspect_ratio | times: 100 }}%;
+        content: '';
+        display: block;
+      }
+    }
+
+    @media screen and (min-width: 750px) {
+      #LookbookBanner-{{ section_id }}::before,
+      #LookbookBanner-{{ section_id }} .banner__media::before {
+        padding-bottom: {{ 1 | divided_by: first_banner_image.aspect_ratio | times: 100 }}%;
+        content: '';
+        display: block;
+      }
+    }
+  {%- endstyle -%}
+{%- endif -%}
+
+{%- style -%}
+  #LookbookBanner-{{ section_id }}::after {
+    opacity: {{ image_overlay_opacity | divided_by: 100.0 }};
+  }
+
+  {%- if banner_background_color != blank -%}
+    #LookbookBanner-{{ section_id }} {
+      background-color: {{ banner_background_color }};
+    }
+  {%- endif -%}
+
+  {%- if banner_content_background_image != blank -%}
+    #LookbookBanner-{{ section_id }} .banner__content {
+      background-image: url('{{ banner_content_background_image | image_url: width: 3840 }}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  {%- endif -%}
+{%- endstyle -%}
+
+<div
+  id="LookbookBanner-{{ section_id }}"
+  class="lookbook-banner lookbook-banner--contained lookbook-banner--carousel banner banner--content-align-{{ desktop_content_alignment }} banner--content-align-mobile-{{ mobile_content_alignment }} banner--{{ banner_height }}{% if banner_height == 'adapt' and first_banner_image != blank %} banner--adapt{% endif %}"
+>
+  {%- assign media_index = 0 -%}
+  {%- assign media_rendered = 0 -%}
+  {%- for lb in shop.metaobjects.lookbook.values -%}
+    {%- if media_rendered >= max_lookbooks -%}
+      {%- break -%}
+    {%- endif -%}
+
+    {%- assign handles = lb.product_handles.value -%}
+    {%- if handles != blank and handles contains product_handle -%}
+      {%- liquid
+        assign banner_image = lb.banner_image.value
+        assign media_hidden = false
+        unless media_index == 0
+          assign media_hidden = true
+        endunless
+      -%}
+
+      <div
+        class="lookbook-carousel__media-panel{% if media_hidden == true %} lookbook-carousel__panel--hidden{% endif %}"
+        data-lookbook-banner-panel="{{ media_index }}"
+      >
+        <div class="banner__media media{% if banner_image == blank %} placeholder{% endif %}">
+          {%- if banner_image != blank -%}
+            {%- liquid
+              assign image_height = banner_image.width | divided_by: banner_image.aspect_ratio
+              assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+            -%}
+            {{
+              banner_image
+              | image_url: width: 3840
+              | image_tag:
+                loading: 'lazy',
+                width: banner_image.width,
+                height: image_height,
+                sizes: '(min-width: 750px) calc(var(--page-width) - 10rem), 100vw',
+                widths: widths
+            }}
+          {%- else -%}
+            {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- assign media_index = media_index | plus: 1 -%}
+      {%- assign media_rendered = media_rendered | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  <div class="banner__content banner__content--{{ content_position }}">
+    <div class="banner__box content-container content-container--full-width-mobile color-{{ color_scheme }} gradient">
+      {%- assign copy_index = 0 -%}
+      {%- assign copy_rendered = 0 -%}
+      {%- for lb in shop.metaobjects.lookbook.values -%}
+        {%- if copy_rendered >= max_lookbooks -%}
+          {%- break -%}
+        {%- endif -%}
+
+        {%- assign handles = lb.product_handles.value -%}
+        {%- if handles != blank and handles contains product_handle -%}
+          {%- liquid
+            assign copy_hidden = false
+            unless copy_index == 0
+              assign copy_hidden = true
+            endunless
+          -%}
+          {%- capture description_html -%}
+            {{ lb.description | metafield_tag }}
+          {%- endcapture -%}
+
+          <div
+            class="lookbook-carousel__copy-panel{% if copy_hidden == true %} lookbook-carousel__panel--hidden{% endif %}"
+            data-lookbook-banner-panel="{{ copy_index }}"
+          >
+            {%- if lb.title.value != blank -%}
+              <h2 class="banner__heading inline-richtext h1">
+                {{ lb.title.value }}
+              </h2>
+            {%- endif -%}
+
+            {%- if description_html != blank -%}
+              <div class="banner__text rte">
+                {{ description_html }}
+              </div>
+            {%- endif -%}
+          </div>
+
+          {%- assign copy_index = copy_index | plus: 1 -%}
+          {%- assign copy_rendered = copy_rendered | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      <div class="lookbook-carousel__tabs" role="tablist" aria-label="Lookbook selection">
+        {%- assign tab_index = 0 -%}
+        {%- assign tab_rendered = 0 -%}
+        {%- for lb in shop.metaobjects.lookbook.values -%}
+          {%- if tab_rendered >= max_lookbooks -%}
+            {%- break -%}
+          {%- endif -%}
+
+          {%- assign handles = lb.product_handles.value -%}
+          {%- if handles != blank and handles contains product_handle -%}
+            <button
+              type="button"
+              class="lookbook-carousel__tab{% if tab_index == 0 %} lookbook-carousel__tab--active{% endif %}"
+              role="tab"
+              data-lookbook-tab="{{ tab_index }}"
+              aria-selected="{% if tab_index == 0 %}true{% else %}false{% endif %}"
+              aria-controls="LookbookPanel-{{ section_id }}-{{ tab_index }}"
+            >
+              {{ lb.title.value }}
+            </button>
+            {%- assign tab_index = tab_index | plus: 1 -%}
+            {%- assign tab_rendered = tab_rendered | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>

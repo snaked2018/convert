@@ -1,0 +1,116 @@
+{% doc %}
+  Dawn-style image banner with lookbook title and description inside the banner box.
+  @param lookbook {object} Metaobject entry
+  @param section_id {string}
+  @param banner_height {string} Dawn banner height: small | medium | large | adapt
+  @param content_position {string} e.g. middle-center
+  @param mobile_content_alignment {string} center | left | right
+  @param desktop_content_alignment {string} center | left | right
+  @param image_overlay_opacity {number} 0–100
+  @param color_scheme {string} Dawn color scheme for banner box
+  @param banner_background_color {color} Optional banner container background
+  @param banner_content_background_image {image} Optional background for banner__content
+  @param show_badge {boolean}
+{% enddoc %}
+
+{{ 'section-image-banner.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign banner_image = lookbook.banner_image.value
+  assign content_position = content_position | default: 'middle-center'
+  assign mobile_content_alignment = mobile_content_alignment | default: 'center'
+  assign desktop_content_alignment = desktop_content_alignment | default: 'center'
+  assign banner_height = banner_height | default: 'medium'
+  assign image_overlay_opacity = image_overlay_opacity | default: 30
+  assign color_scheme = color_scheme | default: 'background-1'
+-%}
+
+{%- if banner_height == 'adapt' and banner_image != blank -%}
+  {%- style -%}
+    @media screen and (max-width: 749px) {
+      #LookbookBanner-{{ section_id }}::before,
+      #LookbookBanner-{{ section_id }} .banner__media::before,
+      #LookbookBanner-{{ section_id }}:not(.banner--mobile-bottom) .banner__content::before {
+        padding-bottom: {{ 1 | divided_by: banner_image.aspect_ratio | times: 100 }}%;
+        content: '';
+        display: block;
+      }
+    }
+
+    @media screen and (min-width: 750px) {
+      #LookbookBanner-{{ section_id }}::before,
+      #LookbookBanner-{{ section_id }} .banner__media::before {
+        padding-bottom: {{ 1 | divided_by: banner_image.aspect_ratio | times: 100 }}%;
+        content: '';
+        display: block;
+      }
+    }
+  {%- endstyle -%}
+{%- endif -%}
+
+{%- style -%}
+  #LookbookBanner-{{ section_id }}::after {
+    opacity: {{ image_overlay_opacity | divided_by: 100.0 }};
+  }
+
+  {%- if banner_background_color != blank -%}
+    #LookbookBanner-{{ section_id }} {
+      background-color: {{ banner_background_color }};
+    }
+  {%- endif -%}
+
+  {%- if banner_content_background_image != blank -%}
+    #LookbookBanner-{{ section_id }} .banner__content {
+      background-image: url('{{ banner_content_background_image | image_url: width: 3840 }}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  {%- endif -%}
+{%- endstyle -%}
+
+{%- capture description_html -%}
+  {{ lookbook.description | metafield_tag }}
+{%- endcapture -%}
+
+<div
+  id="LookbookBanner-{{ section_id }}"
+  class="lookbook-banner lookbook-banner--contained banner banner--content-align-{{ desktop_content_alignment }} banner--content-align-mobile-{{ mobile_content_alignment }} banner--{{ banner_height }}{% if banner_height == 'adapt' and banner_image != blank %} banner--adapt{% endif %}"
+>
+  <div class="banner__media media{% if banner_image == blank %} placeholder{% endif %}">
+    {%- if banner_image != blank -%}
+      {%- liquid
+        assign image_height = banner_image.width | divided_by: banner_image.aspect_ratio
+        assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+      -%}
+      {{
+        banner_image
+        | image_url: width: 3840
+        | image_tag:
+          loading: 'lazy',
+          width: banner_image.width,
+          height: image_height,
+          sizes: '(min-width: 750px) calc(var(--page-width) - 10rem), 100vw',
+          widths: widths
+      }}
+    {%- else -%}
+      {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </div>
+
+  <div class="banner__content banner__content--{{ content_position }}">
+    <div class="banner__box content-container content-container--full-width-mobile color-{{ color_scheme }} gradient">
+      {%- if lookbook.title.value != blank -%}
+        <h2 class="banner__heading inline-richtext h1">
+          {{ lookbook.title.value }}
+        </h2>
+      {%- endif -%}
+
+      {%- if description_html != blank -%}
+        <div class="banner__text rte">
+          {{ description_html }}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>

@@ -3,14 +3,28 @@
 -%}
 
 {%- style -%}
-  .section-{{ section.id }}-padding {
+  .section-{{ section.id }}-banner {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: 0;
+  }
+
+  .section-{{ section.id }}-grid {
+    padding-top: 0;
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
 
+  {%- if section.settings.background_color != blank -%}
+    .section-{{ section.id }}-wrapper {
+      background: {{ section.settings.background_color }};
+    }
+  {%- endif -%}
+
   @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
+    .section-{{ section.id }}-banner {
       padding-top: {{ section.settings.padding_top }}px;
+    }
+
+    .section-{{ section.id }}-grid {
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
@@ -21,23 +35,41 @@
   [{"productHandles": {{ lookbook_item.product_handles.value | json }}}]
   {%- endcapture -%}
 
-  <div class="page-width section-{{ section.id }}-padding">
-    {% render 'lookbook-header', lookbook: lookbook_item %}
+  <div class="section-{{ section.id }}-wrapper color-{{ section.settings.color_scheme }}{% if section.settings.background_color == blank %} gradient{% endif %}">
+    <div class="page-width section-{{ section.id }}-banner">
+      {% render 'lookbook-banner',
+        lookbook: lookbook_item,
+        section_id: section.id,
+        banner_height: section.settings.banner_height,
+        content_position: section.settings.banner_content_position,
+        mobile_content_alignment: section.settings.banner_mobile_content_alignment,
+        desktop_content_alignment: section.settings.banner_desktop_content_alignment,
+        image_overlay_opacity: section.settings.banner_overlay_opacity,
+        color_scheme: section.settings.banner_color_scheme,
+        banner_background_color: section.settings.banner_background_color,
+        banner_content_background_image: section.settings.banner_content_background_image,
+        show_badge: true
+      %}
+    </div>
 
-    {% render 'lookbook-mount',
-      lookbooks: lookbooks_json,
-      section_id: section.id,
-      columns_desktop: section.settings.columns_desktop,
-      columns_mobile: section.settings.columns_mobile,
-      image_ratio: section.settings.image_ratio,
-      show_secondary_image: section.settings.show_secondary_image,
-      show_vendor: section.settings.show_vendor
-    %}
+    <div class="page-width section-{{ section.id }}-grid">
+      {% render 'lookbook-mount',
+        lookbooks: lookbooks_json,
+        section_id: section.id,
+        columns_desktop: section.settings.columns_desktop,
+        columns_mobile: section.settings.columns_mobile,
+        image_ratio: section.settings.image_ratio,
+        show_secondary_image: section.settings.show_secondary_image,
+        show_vendor: section.settings.show_vendor
+      %}
+    </div>
   </div>
 
 {%- elsif request.design_mode -%}
-  <div class="page-width section-{{ section.id }}-padding">
-    <p>Select a lookbook in section settings.</p>
+  <div class="section-{{ section.id }}-wrapper color-{{ section.settings.color_scheme }}{% if section.settings.background_color == blank %} gradient{% endif %}">
+    <div class="page-width section-{{ section.id }}-banner">
+      <p>Select a lookbook in section settings.</p>
+    </div>
   </div>
 {%- endif -%}
 
@@ -51,15 +83,112 @@
   },
   "settings": [
     {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background color",
+      "info": "Overrides the section background when set. Leave empty to use the color scheme only."
+    },
+    {
       "type": "header",
       "content": "Lookbook",
-      "info": "Select a lookbook to display on the home page."
+      "info": "Select a lookbook to display on the home page. Banner image comes from the lookbook metaobject."
     },
     {
       "type": "metaobject",
       "id": "lookbook",
       "label": "Lookbook",
       "metaobject_type": "lookbook"
+    },
+    {
+      "type": "header",
+      "content": "Banner"
+    },
+    {
+      "type": "select",
+      "id": "banner_height",
+      "label": "Banner height",
+      "options": [
+        { "value": "adapt", "label": "Adapt to image" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "banner_content_position",
+      "label": "Content position",
+      "options": [
+        { "value": "top-left", "label": "Top left" },
+        { "value": "top-center", "label": "Top center" },
+        { "value": "top-right", "label": "Top right" },
+        { "value": "middle-left", "label": "Middle left" },
+        { "value": "middle-center", "label": "Middle center" },
+        { "value": "middle-right", "label": "Middle right" },
+        { "value": "bottom-left", "label": "Bottom left" },
+        { "value": "bottom-center", "label": "Bottom center" },
+        { "value": "bottom-right", "label": "Bottom right" }
+      ],
+      "default": "middle-center"
+    },
+    {
+      "type": "select",
+      "id": "banner_desktop_content_alignment",
+      "label": "Desktop content alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "banner_mobile_content_alignment",
+      "label": "Mobile content alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "banner_overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "label": "Image overlay opacity",
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "banner_color_scheme",
+      "options": [
+        { "value": "accent-1", "label": "t:sections.all.colors.accent_1.label" },
+        { "value": "accent-2", "label": "t:sections.all.colors.accent_2.label" },
+        { "value": "background-1", "label": "t:sections.all.colors.background_1.label" },
+        { "value": "background-2", "label": "t:sections.all.colors.background_2.label" },
+        { "value": "inverse", "label": "t:sections.all.colors.inverse.label" }
+      ],
+      "default": "background-1",
+      "label": "Banner box color scheme",
+      "info": "t:sections.image-banner.settings.color_scheme.info"
+    },
+    {
+      "type": "color",
+      "id": "banner_background_color",
+      "label": "Banner background color",
+      "info": "Background behind the banner image. Useful as a fallback or letterbox color."
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_content_background_image",
+      "label": "Content background image",
+      "info": "Optional background image for the banner content area behind the text box."
     },
     {
       "type": "header",

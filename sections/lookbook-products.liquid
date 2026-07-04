@@ -21,6 +21,12 @@
       padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
     }
 
+    {%- if section.settings.background_color != blank -%}
+      .section-{{ section.id }}-wrapper {
+        background: {{ section.settings.background_color }};
+      }
+    {%- endif -%}
+
     @media screen and (min-width: 750px) {
       .section-{{ section.id }}-padding {
         padding-top: {{ section.settings.padding_top }}px;
@@ -29,38 +35,28 @@
     }
   {%- endstyle -%}
 
-  <div class="page-width section-{{ section.id }}-padding">
-    {%- if match_count > 1 -%}
-      <div
-        class="lookbook-carousel"
-        id="LookbookCarousel-{{ section.id }}"
-        data-lookbook-carousel
-      >
-        <div class="lookbook-carousel__tabs" role="tablist" aria-label="Lookbook selection">
-          {%- assign tab_index = 0 -%}
-          {%- assign tab_rendered = 0 -%}
-          {%- for lb in shop.metaobjects.lookbook.values -%}
-            {%- if tab_rendered >= max_lookbooks -%}
-              {%- break -%}
-            {%- endif -%}
+  <div class="section-{{ section.id }}-wrapper color-{{ section.settings.color_scheme }}{% if section.settings.background_color == blank %} gradient{% endif %}">
+    <div class="page-width section-{{ section.id }}-padding">
+      {%- if match_count > 1 -%}
+        {{ 'section-image-banner.css' | asset_url | stylesheet_tag }}
 
-            {%- assign handles = lb.product_handles.value -%}
-            {%- if handles != blank and handles contains product.handle -%}
-              <button
-                type="button"
-                class="lookbook-carousel__tab{% if tab_index == 0 %} lookbook-carousel__tab--active{% endif %}"
-                role="tab"
-                data-lookbook-tab="{{ tab_index }}"
-                aria-selected="{% if tab_index == 0 %}true{% else %}false{% endif %}"
-                aria-controls="LookbookPanel-{{ section.id }}-{{ tab_index }}"
-              >
-                {{ lb.title.value }}
-              </button>
-              {%- assign tab_index = tab_index | plus: 1 -%}
-              {%- assign tab_rendered = tab_rendered | plus: 1 -%}
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
+        <div
+          class="lookbook-carousel"
+          id="LookbookCarousel-{{ section.id }}"
+          data-lookbook-carousel
+        >
+          {% render 'lookbook-carousel-banner',
+            section_id: section.id,
+            product_handle: product.handle,
+            banner_height: section.settings.banner_height,
+            banner_content_position: section.settings.banner_content_position,
+            banner_mobile_content_alignment: section.settings.banner_mobile_content_alignment,
+            banner_desktop_content_alignment: section.settings.banner_desktop_content_alignment,
+            banner_overlay_opacity: section.settings.banner_overlay_opacity,
+            banner_color_scheme: section.settings.banner_color_scheme,
+            banner_background_color: section.settings.banner_background_color,
+            banner_content_background_image: section.settings.banner_content_background_image
+          %}
 
         {%- assign panel_index = 0 -%}
         {%- assign panel_rendered = 0 -%}
@@ -76,13 +72,19 @@
               unless panel_index == 0
                 assign panel_hidden = true
               endunless
+              assign mount_id = section.id | append: '-' | append: panel_index
             -%}
-            <div id="LookbookPanel-{{ section.id }}-{{ panel_index }}">
-              {% render 'lookbook-product-panel',
-                lookbook: lb,
-                section_id: section.id,
-                panel_index: panel_index,
-                panel_hidden: panel_hidden,
+            {%- capture lookbooks_json -%}
+            [{"productHandles": {{ lb.product_handles.value | json }}}]
+            {%- endcapture -%}
+            <div
+              id="LookbookPanel-{{ section.id }}-{{ panel_index }}"
+              class="lookbook-carousel__panel{% if panel_hidden == true %} lookbook-carousel__panel--hidden{% endif %}"
+              data-lookbook-panel="{{ panel_index }}"
+            >
+              {% render 'lookbook-mount',
+                lookbooks: lookbooks_json,
+                section_id: mount_id,
                 columns_desktop: section.settings.columns_desktop,
                 columns_mobile: section.settings.columns_mobile,
                 image_ratio: section.settings.image_ratio,
@@ -103,6 +105,15 @@
             lookbook: lb,
             section_id: section.id,
             panel_index: 0,
+            panel_hidden: false,
+            banner_height: section.settings.banner_height,
+            banner_content_position: section.settings.banner_content_position,
+            banner_mobile_content_alignment: section.settings.banner_mobile_content_alignment,
+            banner_desktop_content_alignment: section.settings.banner_desktop_content_alignment,
+            banner_overlay_opacity: section.settings.banner_overlay_opacity,
+            banner_color_scheme: section.settings.banner_color_scheme,
+            banner_background_color: section.settings.banner_background_color,
+            banner_content_background_image: section.settings.banner_content_background_image,
             columns_desktop: section.settings.columns_desktop,
             columns_mobile: section.settings.columns_mobile,
             image_ratio: section.settings.image_ratio,
@@ -112,7 +123,8 @@
           {%- break -%}
         {%- endif -%}
       {%- endfor -%}
-    {%- endif -%}
+      {%- endif -%}
+    </div>
   </div>
 {%- endif -%}
 
@@ -126,8 +138,105 @@
   },
   "settings": [
     {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background color",
+      "info": "Overrides the section background when set. Leave empty to use the color scheme only."
+    },
+    {
       "type": "paragraph",
-      "content": "Shows lookbooks that include the current product. A maximum of two lookbooks are displayed."
+      "content": "Shows lookbooks that include the current product. A maximum of two lookbooks are displayed. Banner image, title, and description come from each matching lookbook metaobject."
+    },
+    {
+      "type": "header",
+      "content": "Banner"
+    },
+    {
+      "type": "select",
+      "id": "banner_height",
+      "label": "Banner height",
+      "options": [
+        { "value": "adapt", "label": "Adapt to image" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "banner_content_position",
+      "label": "Content position",
+      "options": [
+        { "value": "top-left", "label": "Top left" },
+        { "value": "top-center", "label": "Top center" },
+        { "value": "top-right", "label": "Top right" },
+        { "value": "middle-left", "label": "Middle left" },
+        { "value": "middle-center", "label": "Middle center" },
+        { "value": "middle-right", "label": "Middle right" },
+        { "value": "bottom-left", "label": "Bottom left" },
+        { "value": "bottom-center", "label": "Bottom center" },
+        { "value": "bottom-right", "label": "Bottom right" }
+      ],
+      "default": "middle-center"
+    },
+    {
+      "type": "select",
+      "id": "banner_desktop_content_alignment",
+      "label": "Desktop content alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "banner_mobile_content_alignment",
+      "label": "Mobile content alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "banner_overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "label": "Image overlay opacity",
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "banner_color_scheme",
+      "options": [
+        { "value": "accent-1", "label": "t:sections.all.colors.accent_1.label" },
+        { "value": "accent-2", "label": "t:sections.all.colors.accent_2.label" },
+        { "value": "background-1", "label": "t:sections.all.colors.background_1.label" },
+        { "value": "background-2", "label": "t:sections.all.colors.background_2.label" },
+        { "value": "inverse", "label": "t:sections.all.colors.inverse.label" }
+      ],
+      "default": "background-1",
+      "label": "Banner box color scheme",
+      "info": "t:sections.image-banner.settings.color_scheme.info"
+    },
+    {
+      "type": "color",
+      "id": "banner_background_color",
+      "label": "Banner background color",
+      "info": "Background behind the banner image. Useful as a fallback or letterbox color."
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_content_background_image",
+      "label": "Content background image",
+      "info": "Optional background image for the banner content area behind the text box."
     },
     {
       "type": "header",
