@@ -1,0 +1,20 @@
+{% doc %}
+  Mounts the React lookbook app.
+  @param lookbooks {array} - Array of lookbook objects with title, description, productHandles
+  @param section_id {string} - Section id for unique root element
+{% enddoc %}
+
+{%- liquid
+  assign country_code = localization.country.iso_code
+  assign currency_code = cart.currency.iso_code
+-%}
+
+<div
+  id="lookbook-{{ section_id }}"
+  class="lookbook-root"
+  data-lookbook-config='{
+    "lookbooks": {{ lookbooks }},
+    "country": {{ country_code | json }},
+    "currency": {{ currency_code | json }}
+  }'
+></div>

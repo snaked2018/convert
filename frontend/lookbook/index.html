@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lookbook local test</title>
+  </head>
+  <body>
+    <!-- Same as theme.liquid -->
+    <script id="lookbook-credentials" type="application/json">
+      {
+        "storefrontAccessToken": "750146a9bc59ac44880ea0b33895bd81"
+      }
+    </script>
+
+    <!-- Same as lookbook-mount.liquid -->
+    <div
+      id="lookbook-local-test"
+      class="lookbook-root"
+      data-lookbook-config='{
+        "lookbooks": [{
+          "title": "Local Preview",
+          "productHandles": ["the-complete-snowboard"]
+        }],
+        "country": "AU",
+        "currency": "AUD"
+      }'
+    ></div>
+
+    <!-- main.jsx uses window.Shopify.shop for API calls -->
+    <script>
+      window.Shopify = { shop: "development-xl4ruurg.myshopify.com" };
+    </script>
+
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
