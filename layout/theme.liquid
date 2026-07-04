@@ -299,5 +299,14 @@
     {%- if settings.predictive_search_enabled -%}
       <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
+
+    {% comment %} Lookbook credentials for the React lookbook app {% endcomment %}
+    {%- if settings.storefront_access_token != blank -%}
+      <script id="lookbook-credentials" type="application/json">
+        {
+          "storefrontAccessToken": {{ settings.storefront_access_token | json }}
+        }
+      </script>
+    {%- endif -%}
   </body>
 </html>

@@ -382,6 +382,21 @@
           "label": "Vertical space"
         }
       }
+    },
+    "lookbook": {
+      "name": "Lookbook",
+      "settings": {
+        "header": {
+          "content": "Lookbook settings"
+        },
+        "lookbook_title": {
+          "label": "Lookbook section title"
+        },
+        "storefront_access_token": {
+          "label": "Storefront access token",
+          "info": "The storefront access token is used to access the Shopify storefront API. You can find it in the Shopify admin panel under Settings > API > Storefront API. This is required to fetch the products for the lookbook section."
+        }
+      }
     }
   },
   "sections": {
