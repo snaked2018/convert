@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Garment Decoration local test</title>
+    <style>
+      html,
+      body,
+      #garmentdecoration-local-test {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        background: #e8e2da;
+      }
+    </style>
+  </head>
+  <body>
+    <script id="garmentdecoration-credentials" type="application/json">
+      {
+        "storefrontAccessToken": "YOUR_STOREFRONT_TOKEN_HERE",
+        "shopDomain": "your-store.myshopify.com"
+      }
+    </script>
+
+    <div
+      id="garmentdecoration-local-test"
+      class="garmentdecoration-root"
+      data-garmentdecoration-config='{
+        "productHandle": "example-product",
+        "productId": 123456789,
+        "productTitle": "Premium Cotton Tee",
+        "productFormId": "product-form-local",
+        "sectionId": "local-test",
+        "country": "US",
+        "currency": "USD"
+      }'
+    ></div>
+
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
