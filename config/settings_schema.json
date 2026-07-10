@@ -1557,5 +1557,23 @@
         "info": "t:settings_schema.cart.settings.cart_drawer.collection.info"
       }
     ]
+  },
+  {
+    "name": "Garment Decoration",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_garment_decoration",
+        "label": "Enable garment decoration",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "storefront_access_token_gd",
+        "label": "Storefront Access Token",
+        "info": "This is the access token for the Garment Decoration storefront API. It is used to access the Garment Decoration storefront API.",
+        "default": "750146a9bc59ac44880ea0b33895bd81"
+      }
+    ]
   }
 ]

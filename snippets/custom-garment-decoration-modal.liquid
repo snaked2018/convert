@@ -1,0 +1,38 @@
+{% doc %}
+  Modal shell for the garment decoration app.
+  @param product {product} Current product
+  @param section_id {string} Section id for unique modal and root ids
+  @param product_form_id {string} Product form id for cart integration
+{% enddoc %}
+
+{%- if settings.enable_garment_decoration and settings.storefront_access_token_gd != blank and product.tags contains 'garment-decoration' -%}
+  <modal-dialog
+    id="GarmentDecorationModal-{{ section_id }}"
+    class="garmentdecoration-modal product-popup-modal"
+  >
+    <div
+      role="dialog"
+      aria-label="Customise garment"
+      aria-modal="true"
+      class="product-popup-modal__content garmentdecoration-modal__content"
+      tabindex="-1"
+    >
+      <button
+        id="ModalClose-garmentdecoration-{{ section_id }}"
+        type="button"
+        class="product-popup-modal__toggle"
+        aria-label="{{ 'accessibility.close' | t }}"
+      >
+        {% render 'icon-close' %}
+      </button>
+
+      <div class="garmentdecoration-modal__body">
+        {% render 'custom-garment-decoration-mount',
+          product: product,
+          section_id: section_id,
+          product_form_id: product_form_id
+        %}
+      </div>
+    </div>
+  </modal-dialog>
+{%- endif -%}

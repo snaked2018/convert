@@ -299,5 +299,17 @@
     {%- if settings.predictive_search_enabled -%}
       <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
+
+
+    {%- if settings.enable_garment_decoration and settings.storefront_access_token_gd != blank -%}
+      <script id="garmentdecoration-credentials" type="application/json">
+        {
+          "storefrontAccessToken": {{ settings.storefront_access_token_gd | json }},
+          "shopDomain": {{ shop.permanent_domain | json }}
+        }
+      </script>
+      {{ 'garmentdecoration.css' | asset_url | stylesheet_tag }}
+      <script src="{{ 'garmentdecoration.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
   </body>
 </html>

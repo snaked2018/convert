@@ -1,0 +1,19 @@
+{% doc %}
+  Customise button for garment decoration. Opens the decoration modal.
+  @param section_id {string} Section id for modal targeting
+{% enddoc %}
+
+{%- if settings.enable_garment_decoration and settings.storefront_access_token_gd != blank and product.tags contains 'garment-decoration' -%}
+  <modal-opener
+    class="garmentdecoration-opener no-js-hidden"
+    data-modal="#GarmentDecorationModal-{{ section_id }}"
+  >
+    <button
+      type="button"
+      class="garmentdecoration-trigger button button--full-width button--secondary"
+      aria-haspopup="dialog"
+    >
+      Customise
+    </button>
+  </modal-opener>
+{%- endif -%}

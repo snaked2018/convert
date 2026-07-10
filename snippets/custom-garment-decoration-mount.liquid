@@ -1,0 +1,25 @@
+{% doc %}
+  Mounts the React garment decoration app on a product page.
+  @param product {product} Current product
+  @param section_id {string} Section id for a unique root element
+  @param product_form_id {string} Product form id for cart integration
+{% enddoc %}
+
+{%- liquid
+  assign country_code = localization.country.iso_code
+  assign currency_code = cart.currency.iso_code
+-%}
+
+<div
+  id="garmentdecoration-{{ section_id }}"
+  class="garmentdecoration-root"
+  data-garmentdecoration-config='{
+    "productHandle": {{ product.handle | json }},
+    "productId": {{ product.id | json }},
+    "productTitle": {{ product.title | json }},
+    "productFormId": {{ product_form_id | json }},
+    "sectionId": {{ section_id | json }},
+    "country": {{ country_code | json }},
+    "currency": {{ currency_code | json }}
+  }'
+></div>

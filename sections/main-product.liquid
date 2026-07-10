@@ -312,6 +312,11 @@
               {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
             {%- when 'buy_buttons' -%}
               {%- render 'buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true -%}
+              
+              {% render 'custom-garment-decoration-trigger',
+                product: product,
+                section_id: section.id
+              %}
             {%- when 'rating' -%}
               {%- if product.metafields.reviews.rating.value != blank -%}
                 {% liquid
@@ -476,6 +481,12 @@
       </div>
     </modal-dialog>
   {%- endfor -%}
+
+  {% render 'custom-garment-decoration-modal',
+    product: product,
+    section_id: section.id,
+    product_form_id: product_form_id
+  %}
 
   {%- if product.media.size > 0 -%}
     <script src="{{ 'product-modal.js' | asset_url }}" defer="defer"></script>
