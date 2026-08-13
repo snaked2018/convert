@@ -12,6 +12,13 @@
     "main": {
       "type": "main-product",
       "blocks": {
+        "size_chart_size_chart_bRnRtM": {
+          "type": "shopify://apps/size-chart/blocks/size-chart/019ff933-809e-787b-a5c3-cf5f9fef47e9",
+          "settings": {
+            "button_label": "Size chart",
+            "metric_label": "Metric"
+          }
+        },
         "title": {
           "type": "title",
           "settings": {}
@@ -58,6 +65,7 @@
         }
       },
       "block_order": [
+        "size_chart_size_chart_bRnRtM",
         "title",
         "vendor",
         "variant_picker",
