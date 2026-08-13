@@ -153,11 +153,8 @@
     "blocks": {
       "8024230600443385254": {
         "type": "shopify://apps/size-chart/blocks/size-chart/019ff959-8427-78ef-81fe-3099795cd1d3",
-        "disabled": true,
-        "settings": {
-          "button_label": "Size chart",
-          "metric_label": "Metric"
-        }
+        "disabled": false,
+        "settings": {}
       }
     }
   },
