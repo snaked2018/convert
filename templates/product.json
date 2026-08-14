@@ -38,10 +38,6 @@
           "type": "price",
           "settings": {}
         },
-        "size_chart_size_chart_button_ctr97d": {
-          "type": "shopify://apps/size-chart/blocks/size-chart-button/019ff959-8427-78ef-81fe-3099795cd1d3",
-          "settings": {}
-        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -67,7 +63,6 @@
         "variant_picker",
         "quantity_selector",
         "price",
-        "size_chart_size_chart_button_ctr97d",
         "buy_buttons",
         "description",
         "share"
