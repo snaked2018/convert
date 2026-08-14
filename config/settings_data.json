@@ -151,8 +151,8 @@
     },
     "content_for_index": [],
     "blocks": {
-      "15834912306449781562": {
-        "type": "shopify://apps/size-chart/blocks/size-chart/019ff95c-5e87-7361-8ac1-bb2cd5b3ff9b",
+      "7140096721203198563": {
+        "type": "shopify://apps/pb-size-chart/blocks/size-chart/01a0005b-ca88-7d86-a8c5-04026521322b",
         "disabled": false,
         "settings": {}
       }
