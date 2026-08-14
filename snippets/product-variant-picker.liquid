@@ -10,6 +10,10 @@
   {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
 {% endcomment %}
 {%- unless product.has_only_default_variant -%}
+  {% comment %}
+  PlatinumBrands Size Chart
+{% endcomment %}
+<div class="size-chart-trigger"></div>
   {%- if block.settings.picker_type == 'button' -%}
     <variant-radios
       id="variant-radios-{{ section.id }}"
