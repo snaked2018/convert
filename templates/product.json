@@ -49,10 +49,6 @@
           "type": "description",
           "settings": {}
         },
-        "pb_size_chart_size_chart_button_pfnJin": {
-          "type": "shopify://apps/pb-size-chart/blocks/size-chart-button/01a0005b-ca88-7d86-a8c5-04026521322b",
-          "settings": {}
-        },
         "share": {
           "type": "share",
           "disabled": true,
@@ -69,7 +65,6 @@
         "price",
         "buy_buttons",
         "description",
-        "pb_size_chart_size_chart_button_pfnJin",
         "share"
       ],
       "settings": {
