@@ -151,22 +151,10 @@
     },
     "content_for_index": [],
     "blocks": {
-      "7140096721203198563": {
-        "type": "shopify://apps/pb-size-chart/blocks/size-chart/01a0005b-ca88-7d86-a8c5-04026521322b",
-        "disabled": false,
-        "settings": {}
-      },
       "17570117633862637558": {
         "type": "shopify://apps/pb-size-chart/blocks/size-guide-embed/01a01070-5fa4-77dc-8732-ab015abbb306",
         "disabled": false,
-        "settings": {
-          "trigger_label": "Size guide",
-          "accent_color": "#111111",
-          "text_color": "#111111",
-          "insert_selector": "form[action*=\"/cart/add\"]",
-          "insert_position": "before",
-          "floating_fallback": true
-        }
+        "settings": {}
       }
     }
   },
