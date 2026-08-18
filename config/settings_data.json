@@ -155,6 +155,11 @@
         "type": "shopify://apps/pb-size-chart/blocks/size-guide-embed/01a01070-5fa4-77dc-8732-ab015abbb306",
         "disabled": false,
         "settings": {}
+      },
+      "7241659924025436803": {
+        "type": "shopify://apps/mp-size-chart/blocks/app-embed/305100b1-3599-492a-a54d-54f196ff1f94",
+        "disabled": false,
+        "settings": {}
       }
     }
   },
