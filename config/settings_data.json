@@ -158,7 +158,7 @@
       },
       "17570117633862637558": {
         "type": "shopify://apps/pb-size-chart/blocks/size-guide-embed/01a01070-5fa4-77dc-8732-ab015abbb306",
-        "disabled": false,
+        "disabled": true,
         "settings": {}
       }
     }
