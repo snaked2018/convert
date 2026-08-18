@@ -38,14 +38,9 @@
           "type": "price",
           "settings": {}
         },
-        "pb_size_chart_size_guide_wLR3tp": {
+        "pb_size_chart_size_guide_Ncr9Nr": {
           "type": "shopify://apps/pb-size-chart/blocks/size-guide/01a01070-5fa4-77dc-8732-ab015abbb306",
-          "settings": {
-            "product": "{{product}}",
-            "trigger_label": "Size guide",
-            "accent_color": "#111111",
-            "text_color": "#111111"
-          }
+          "settings": {}
         },
         "buy_buttons": {
           "type": "buy_buttons",
@@ -72,7 +67,7 @@
         "variant_picker",
         "quantity_selector",
         "price",
-        "pb_size_chart_size_guide_wLR3tp",
+        "pb_size_chart_size_guide_Ncr9Nr",
         "buy_buttons",
         "description",
         "share"
