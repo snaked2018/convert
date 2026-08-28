@@ -12,10 +12,6 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "pb_size_chart_size_guide_Ncr9Nr": {
-          "type": "shopify://apps/pb-size-chart/blocks/size-guide/01a01070-5fa4-77dc-8732-ab015abbb306",
-          "settings": {}
-        },
         "title": {
           "type": "title",
           "settings": {}
@@ -62,7 +58,6 @@
         }
       },
       "block_order": [
-        "pb_size_chart_size_guide_Ncr9Nr",
         "title",
         "vendor",
         "variant_picker",
